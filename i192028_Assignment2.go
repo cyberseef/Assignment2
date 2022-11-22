@@ -1,3 +1,4 @@
+// package
 package main
 
 import (
@@ -9,6 +10,7 @@ import (
 	"strings"
 )
 
+// Exporting Block Struct
 type Block struct {
 	Nonce       int
 	Transaction []Transaction
@@ -27,6 +29,7 @@ type Block struct {
 // 	return fmt.Sprintf("%x", sha256.Sum256([]byte(blc.Prevhash+trans+strconv.Itoa(blc.Nonce))))
 // }
 
+// Function regarding making Newblock
 func (blc *Blocklist) Newblock(n int) *Block {
 	s := new(Block)
 	s.Nonce = n
@@ -54,13 +57,14 @@ func (blc *Blocklist) Newblock(n int) *Block {
 	}
 }
 
+// Exporting Blocklist Struct
 type Blocklist struct {
 	list            []*Block
 	TransactionPool []Transaction
 }
 
 type Transaction struct {
-	TransactionId              string
+	TransactionID              string
 	SenderBlockchainAddress    string
 	RecipientBlockchainAddress string
 	Value                      float32
@@ -113,11 +117,13 @@ func (s *Block) GetString() string {
 	return r
 }
 
+// To export Function for setting Transaction ID
 func (t *Transaction) SetTransactionId() {
 	sum := sha256.Sum256([]byte(t.SenderBlockchainAddress + t.RecipientBlockchainAddress + strconv.FormatFloat(float64(t.Value), 'E', -1, 32)))
-	t.TransactionId = hex.EncodeToString(sum[:])
+	t.TransactionID = hex.EncodeToString(sum[:])
 }
 
+// To export function for creating new Transaction
 func NewTransaction(sender string, recipient string, value float32) *Transaction {
 	trans := new(Transaction)
 	trans.SenderBlockchainAddress = sender
@@ -127,6 +133,7 @@ func NewTransaction(sender string, recipient string, value float32) *Transaction
 	return trans
 }
 
+// To export Function for Adding Transaction
 func (blc *Blocklist) AddTransaction(sender string, recipient string, value float32) {
 	trans := NewTransaction(sender, recipient, value)
 	blc.TransactionPool = append(blc.TransactionPool, *trans)
